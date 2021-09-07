@@ -12,6 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static org.camunda.bpm.engine.rest.security.auth.AuthenticationResult.successful;
+import static org.camunda.bpm.engine.rest.security.auth.AuthenticationResult.unsuccessful;
+
 public class WebAppAuthenticationProvider extends ContainerBasedAuthenticationProvider {
 
     private final Logger logger = LoggerFactory.getLogger(WebAppAuthenticationProvider.class.getName());
@@ -25,17 +28,17 @@ public class WebAppAuthenticationProvider extends ContainerBasedAuthenticationPr
 
         if (authentication == null) {
             logger.debug("++ authentication == null...return unsuccessful.");
-            return AuthenticationResult.unsuccessful();
+            return unsuccessful();
         }
 
         logger.debug("++ authentication IS NOT NULL");
         String name = authentication.getName();
         if (name == null || name.isEmpty()) {
-            return AuthenticationResult.unsuccessful();
+            return unsuccessful();
         }
 
         logger.debug("++ name = " + name);
-        AuthenticationResult authenticationResult = new AuthenticationResult(name, true);
+        AuthenticationResult authenticationResult = successful(name);
         authenticationResult.setGroups(getUserGroups(authentication));
 
         return authenticationResult;
@@ -51,7 +54,7 @@ public class WebAppAuthenticationProvider extends ContainerBasedAuthenticationPr
                 .map(res -> res.substring(5)) // Strip "ROLE_"
                 .collect(Collectors.toList());
 
-        logger.debug("++ groupIds = " + groupIds.toString());
+        logger.debug("++ groupIds = " + groupIds);
 
         return groupIds;
 
