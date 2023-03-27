@@ -40,10 +40,6 @@ server:
 #
 #  # Specifies the list of Active Directory groups to use for authorization:
 #  azure.activedirectory.active-directory-groups=Users
-azure:
-  activedirectory:
-    tenant-id: aaaaaaaa-YOUR-TENANT-ID-HERE-zzzzzzzzzzzz
-    active-directory-groups: your-azure-group-1, your-azure-group-2
 
 spring:
   h2:
@@ -51,18 +47,22 @@ spring:
       enabled: false
   #      enabled: true
   datasource:
-    url: jdbc:postgresql://your-db-domain.postgres.database.azure.com:5432/postgres?ssl=true&sslmode=require
-    username: camunda@your-db-domain
-    password: yourdbpass
-    driver-class-name: org.postgresql.Driver
-    #  url: jdbc:h2:./camunda-db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-    #  username: sa
-    #  password: sa
-  security:
-    oauth2:
-      client:
-        registration:
-          azure:
-            client-id: aaaaaaaa-YOUR-CLIENT-ID-HERE-zzzzzzzzzzzz
-            client-secret: aaaaaaaa-YOUR-CLIENT-SECRET-HERE-zzzzzzzzzzzz
-            redirect-uri: http://localhost:8080/login/oauth2/code/azure
+    #url: jdbc:postgresql://your-db-domain.postgres.database.azure.com:5432/postgres?ssl=true&sslmode=require
+    #username: camunda@your-db-domain
+    #password: yourdbpass
+    #driver-class-name: org.postgresql.Driver
+    url: jdbc:h2:./camunda-db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password: sa
+  cloud:
+    azure:
+      active-directory:
+        enabled: true
+        profile:
+          tenant-id: xxx-tenantid
+        credential:
+          client-id: xxx-clientid
+          client-secret: xxx-clientsecret
+
+
+

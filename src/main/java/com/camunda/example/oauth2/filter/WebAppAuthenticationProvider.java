@@ -30,7 +30,7 @@ public class WebAppAuthenticationProvider extends ContainerBasedAuthenticationPr
 
         logger.debug("++ authentication IS NOT NULL");
         String name = authentication.getName();
-        if (name == null || name.isEmpty()) {
+        if (name == null || name.isEmpty() || name.equals("anonymousUser")) {
             return AuthenticationResult.unsuccessful();
         }
 

@@ -1,5 +1,6 @@
 package com.camunda.example.oauth2.config;
 
+import com.azure.spring.cloud.autoconfigure.aad.AadWebSecurityConfigurerAdapter;
 import com.camunda.example.oauth2.filter.CamundaAuthenticationFilter;
 import com.camunda.example.oauth2.filter.WebAppAuthenticationProvider;
 import org.slf4j.Logger;
@@ -22,25 +23,26 @@ import java.util.Collections;
 @Configuration
 @EnableWebSecurity(debug = true)
 @Order(SecurityProperties.BASIC_AUTH_ORDER - 15)
-public class WebAppSecurityConfig extends WebSecurityConfigurerAdapter {
+public class WebAppSecurityConfig extends AadWebSecurityConfigurerAdapter {
 
     private final Logger logger = LoggerFactory.getLogger(WebAppSecurityConfig.class.getName());
 
-    @Autowired
-    private OAuth2UserService<OidcUserRequest, OidcUser> oidcUserService;
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        super.configure(http);
 
-        http.authorizeRequests().antMatchers("/app/admin/**", "/app/cockpit/**", "/app/tasklist/**").authenticated()
-                .and()
-                .authorizeRequests().antMatchers("/**").permitAll()
-                .and()
-                .oauth2Login()
-                .userInfoEndpoint()
-                .oidcUserService(oidcUserService);
+        //http.authorizeRequests().antMatchers("/app/admin/**", "/app/cockpit/**", "/app/tasklist/**").authenticated()
+        //    .and()
+        //    .authorizeRequests().antMatchers("/**").permitAll()
+        //    .and()
+        //    .oauth2Login();
+            //.userInfoEndpoint()
+            //.oidcUserService(oidcUserService);
 
-        http.csrf().disable();
+        http.authorizeRequests()
+            .anyRequest().authenticated();
+
+        //http.csrf().disable();
     }
 
     @Bean
